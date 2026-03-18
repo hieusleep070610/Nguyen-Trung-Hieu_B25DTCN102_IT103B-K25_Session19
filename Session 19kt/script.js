@@ -17,7 +17,7 @@ let renderList = () => {
                 <td>
                   <div class="action-buttons">
                     <button class="btn-edit">Sửa</button>
-                    <button class="btn-delete">Xóa</button>
+                    <button class="btn-delete" onclick="deleteContact(${contact.STT})">Xóa</button>
                   </div>
                 </td>
               </tr>`
@@ -26,21 +26,23 @@ let renderList = () => {
 }
 renderList();
 
-tbody.addEventListener("click", (event) => {
+let deleteContact = (id) => {
 
-  if (event.target.classList.contains("btn-delete")) {
-    let row = event.target.closest("tr")
-    let found = row.children[1].innerText
-    let confirmDelete = confirm(
-      "Bạn có chắc chắn muốn xóa sản phẩm này?"
+  let findId = contacts.find(
+    contact => contact.STT === id
+  )
+  console.log(findId)
+  if (!findId) return
+  let confirmDelete = confirm(
+    "Bạn có muốn xóa không?"
+  )
+  if (confirmDelete) {
+
+    contacts = contacts.filter(
+      contact => contact.STT !== findId.STT
     )
-    if (confirmDelete) {
-      let index = contacts.findIndex(c => c.name === found)
-      if (index !== -1) {
-        contacts.splice(index, 1)
-      }
-      alert("Xóa sản phẩm thành công!")
-      renderList()
-    }
+    renderList()
+  } else {
+    return
   }
-})
+}
